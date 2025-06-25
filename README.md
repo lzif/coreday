@@ -37,7 +37,7 @@
 
 ---
 
-## 🔍 Insight & Productivity Tools
+## 🔍 Insight & Productivity Tools (Planning)
 
 ### 🪞 Reflective Journal / Mood Tracker
 
@@ -89,13 +89,9 @@
 
 ## 💻 Stack Rekomendasi
 
-- **Frontend:** React Router + TailwindCSS
-- **Animation:** GSAP
-- **State Management:** Zustand
+- **Frontend:** SvelteKit + TailwindCSS + m3-svelte
 - **Storage:** IndexedDB
 - **PWA:** Workbox
-- **Crypto:** Web Crypto API
-- **Sync (opsional):** Supabase
 
 ---
 
