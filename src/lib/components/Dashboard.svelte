@@ -26,18 +26,25 @@
     pomodoro: PomodoroWidget
   };
 
+  let dragDisabled = true;
+
   function handleDndConsider(e) {
     $widgetsLayout = e.detail.items;
   }
 
   function handleDndFinalize(e) {
     $widgetsLayout = e.detail.items;
+    dragDisabled = true;
+  }
+
+  function startDrag(e) {
+    dragDisabled = false;
   }
 </script>
 
 <div class="h-full overflow-y-auto no-scrollbar pb-20">
   <section 
-    use:dndzone={{items: $widgetsLayout, flipDurationMs, dropTargetStyle: {outline: 'none'}}} 
+    use:dndzone={{items: $widgetsLayout, flipDurationMs, dragDisabled, dropTargetStyle: {outline: 'none'}}} 
     on:consider={handleDndConsider} 
     on:finalize={handleDndFinalize}
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-1 min-h-[50vh]"
@@ -51,6 +58,7 @@
         <svelte:component 
           this={widgetComponents[item.type] || WidgetContainer} 
           title={item.title}
+          startDrag={startDrag}
         >
           {#if !widgetComponents[item.type]}
             <div class="text-sm text-gray-400">Widget content not found</div>

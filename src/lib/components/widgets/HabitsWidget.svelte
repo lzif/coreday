@@ -3,8 +3,10 @@
   import { habits } from '../../../stores/appStores.js';
   import { Plus, Flame } from 'lucide-svelte';
   import { v4 as uuidv4 } from 'uuid';
+  import { Target } from 'lucide-svelte';
 
   export let title;
+  export let startDrag;
 
   let newHabitName = '';
   let showInput = false;
@@ -36,7 +38,7 @@
   }
 </script>
 
-<WidgetContainer {title}>
+<WidgetContainer {title} {startDrag}>
   <div class="flex flex-col h-full">
     {#if showInput}
       <div class="mb-4 flex gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
@@ -83,7 +85,10 @@
         </div>
       {/each}
       {#if $habits.length === 0}
-        <div class="text-center text-xs text-gray-400 mt-4">No habits tracked</div>
+        <div class="h-full flex flex-col items-center justify-center text-gray-400 gap-2 min-h-[100px]">
+           <Target size={24} class="opacity-50" />
+           <p class="text-xs">No habits tracked</p>
+        </div>
       {/if}
     </div>
   </div>

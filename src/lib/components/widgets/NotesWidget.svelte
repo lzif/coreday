@@ -4,6 +4,7 @@
   import { Save } from 'lucide-svelte';
 
   export let title;
+  export let startDrag;
 
   let content = $notes[0]?.content || '';
   let lastSaved = null;
@@ -23,7 +24,7 @@
   }
 </script>
 
-<WidgetContainer {title}>
+<WidgetContainer {title} {startDrag}>
   <div class="flex flex-col h-full relative group">
     <textarea
       bind:value={content}

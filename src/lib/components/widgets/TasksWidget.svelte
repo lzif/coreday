@@ -3,8 +3,10 @@
   import { tasks } from '../../../stores/appStores.js';
   import { Plus, Trash2, CheckCircle, Circle } from 'lucide-svelte';
   import { v4 as uuidv4 } from 'uuid';
+  import { CheckSquare } from 'lucide-svelte';
 
   export let title;
+  export let startDrag;
 
   let newTask = '';
 
@@ -34,7 +36,7 @@
   }
 </script>
 
-<WidgetContainer {title}>
+<WidgetContainer {title} {startDrag}>
   <div class="flex flex-col h-full">
     <!-- Add Task -->
     <div class="relative mb-4">
@@ -81,7 +83,10 @@
         </div>
       {/each}
       {#if $tasks.length === 0}
-        <div class="text-center text-xs text-gray-400 mt-8">No tasks yet. Stay focused!</div>
+        <div class="h-full flex flex-col items-center justify-center text-gray-400 gap-2 min-h-[100px]">
+           <CheckSquare size={24} class="opacity-50" />
+           <p class="text-xs">No tasks yet. Stay focused!</p>
+        </div>
       {/if}
     </div>
   </div>

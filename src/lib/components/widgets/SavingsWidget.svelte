@@ -5,6 +5,7 @@
   import { v4 as uuidv4 } from 'uuid';
 
   export let title;
+  export let startDrag;
 
   function addGoal() {
     // Simple mock for now
@@ -29,7 +30,7 @@
   }
 </script>
 
-<WidgetContainer {title} headerAction={Plus}>
+<WidgetContainer {title} headerAction={Plus} {startDrag}>
   <div class="flex flex-col h-full gap-4 overflow-y-auto no-scrollbar pt-2">
     {#if $savings.length === 0}
       <button 

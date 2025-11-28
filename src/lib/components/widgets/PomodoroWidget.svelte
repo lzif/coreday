@@ -4,6 +4,7 @@
   import { onDestroy } from 'svelte';
 
   export let title;
+  export let startDrag;
 
   let timeLeft = 25 * 60; // 25 minutes
   let isRunning = false;
@@ -49,7 +50,7 @@
   });
 </script>
 
-<WidgetContainer {title}>
+<WidgetContainer {title} {startDrag}>
   <div class="flex flex-col h-full items-center justify-center relative">
     <!-- Mode Switcher -->
     <div class="absolute top-0 left-0 right-0 flex justify-center gap-2 mb-4">
@@ -68,7 +69,7 @@
     </div>
 
     <!-- Timer Display -->
-    <div class="text-6xl font-light text-apple-dark tabular-nums tracking-tighter mb-8 mt-6">
+    <div class="text-5xl md:text-6xl font-light text-apple-dark tabular-nums tracking-tighter mb-8 mt-6">
       {formatTime(timeLeft)}
     </div>
 

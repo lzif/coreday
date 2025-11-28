@@ -4,6 +4,7 @@
   import { v4 as uuidv4 } from 'uuid';
 
   export let title;
+  export let startDrag;
 
   const moods = [
     { label: 'Happy', emoji: '😄', color: 'bg-yellow-100 text-yellow-600' },
@@ -21,7 +22,7 @@
   }
 </script>
 
-<WidgetContainer {title}>
+<WidgetContainer {title} {startDrag}>
   <div class="flex flex-col h-full">
     <div class="grid grid-cols-5 gap-2 mb-6">
       {#each moods as m}
@@ -38,17 +39,21 @@
 
     <div class="flex-1 overflow-y-auto no-scrollbar space-y-2">
       <h4 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">History</h4>
-      {#each $mood.slice(0, 5) as log (log.id)}
-        <div class="flex items-center justify-between p-2 rounded-lg bg-white/30 text-sm">
-          <div class="flex items-center gap-2">
-            <span>{log.emoji}</span>
-            <span class="text-gray-700">{log.mood}</span>
+      {#if $mood.length > 0}
+        {#each $mood.slice(0, 5) as log (log.id)}
+          <div class="flex items-center justify-between p-2 rounded-lg bg-white/30 text-sm">
+            <div class="flex items-center gap-2">
+              <span>{log.emoji}</span>
+              <span class="text-gray-700">{log.mood}</span>
+            </div>
+            <span class="text-xs text-gray-400">
+              {new Date(log.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+            </span>
           </div>
-          <span class="text-xs text-gray-400">
-            {new Date(log.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-          </span>
-        </div>
-      {/each}
+        {/each}
+      {:else}
+        <div class="text-center text-xs text-gray-400 py-4 italic">No mood logs yet</div>
+      {/if}
     </div>
   </div>
 </WidgetContainer>
