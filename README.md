@@ -1,6 +1,28 @@
-# Coreday - Modular Life Manager
+# Coreday — Modular Life Manager
 
-Coreday is an offline-first, modular dashboard designed with a modern Apple-like aesthetic. It integrates finance tracking, task management, habit tracking, and more into a customizable interface.
+**Style:** Modular dashboard, offline-first, clean, modern, soft expressive colors, clear typography.
+
+Coreday is a comprehensive life management tool designed with an Apple-like aesthetic (macOS/iOS). It features a modular, drag-and-drop dashboard that works fully offline, ensuring your data stays private and accessible anywhere.
+
+## ✨ Features
+
+- **Finance Tracker:** Manage income/expenses, view categories, and analyze charts.
+- **Time & Task Manager:** Planner, to-dos, subtasks, and calendar integration.
+- **Habit Tracker:** Build good habits with checklists, streaks, and statistics.
+- **Saving Progress:** Track savings goals with visual progress indicators.
+- **Notes & Journal:** Markdown support, tags, pinning, and search functionality.
+- **Insight Engine:** Aggregated insights across habits, mood, and finance.
+- **Reflective Journal/Mood Tracker:** Log moods and track emotions with charts.
+- **Pomodoro Timer & Focus Mode:** Boost productivity with focused work sessions.
+- **Widget Dashboard:** Fully modular, drag-and-drop interface. PWA-ready for mobile and desktop.
+
+## 🎨 UI/UX
+
+- **UX:** Intuitive, responsive, optimized for both mobile and desktop.
+- **UI:** Apple-like design language (Glassmorphism, clean lines, rounded corners).
+- **Persistence:** Offline-first architecture using `localStorage`.
+
+---
 
 ## 🚀 Getting Started
 
@@ -27,23 +49,13 @@ Coreday is an offline-first, modular dashboard designed with a modern Apple-like
 - **Icons:** Lucide Svelte
 - **Drag & Drop:** svelte-dnd-action
 - **PWA:** vite-plugin-pwa
-
-### Offline-First Persistence
-The application uses a custom store factory (`src/stores/persistence.js`) that wraps Svelte's `writable` stores. It automatically syncs state to `localStorage`, ensuring data persists across reloads and offline sessions.
+- **Storage:** `IndexedDB`,fallback to `localStorage` (Offline-first)
 
 ### Directory Structure
 - `src/stores/`: Contains the global state and persistence logic.
 - `src/lib/components/`: Reusable UI components.
 - `src/lib/components/widgets/`: Specific feature widgets (Finance, Tasks, etc.).
 - `src/lib/utils/`: Utility functions (e.g., class name merging).
-
-## 🎨 Design System
-
-The design mimics macOS/iOS aesthetics:
-- **Glassmorphism:** Use the `.glass` utility class for translucent backgrounds with blur.
-- **Colors:** `bg-apple-gray` (#f5f5f7) for the background, `text-apple-dark` (#1d1d1f) for text.
-- **Typography:** Uses system fonts (San Francisco, etc.) via Tailwind config.
-- **Rounded Corners:** Generous border radius (`rounded-2xl`, `rounded-3xl`).
 
 ## 🛠 Extending the Project
 
@@ -53,3 +65,4 @@ To add a new widget:
 3. Create a new store in `src/stores/appStores.js` if it needs data persistence.
 4. Import and map the new widget in `src/lib/components/Dashboard.svelte`.
 5. Add a default entry to the `widgetsLayout` store in `src/stores/appStores.js`.
+
