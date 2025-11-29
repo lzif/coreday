@@ -1,14 +1,17 @@
 <script>
   import WidgetContainer from '../WidgetContainer.svelte';
   import { savings } from '../../../stores/appStores.js';
-  import { Plus, Target } from 'lucide-svelte';
   import { v4 as uuidv4 } from 'uuid';
+  
+  import { Button, Icon, LinearProgress } from 'm3-svelte';
+  
+  import iconAdd from '@ktibow/iconset-material-symbols/add';
+  import iconSavings from '@ktibow/iconset-material-symbols/savings';
 
   export let title;
   export let startDrag;
 
   function addGoal() {
-    // Simple mock for now
     const name = prompt("Goal Name:");
     if (!name) return;
     const target = parseFloat(prompt("Target Amount:"));
@@ -30,43 +33,87 @@
   }
 </script>
 
-<WidgetContainer {title} headerAction={Plus} {startDrag}>
-  <div class="flex flex-col h-full gap-4 overflow-y-auto no-scrollbar pt-2">
-    {#if $savings.length === 0}
-      <button 
-        class="w-full h-32 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center text-gray-400 hover:border-blue-400 hover:text-blue-500 transition-all"
-        onclick={addGoal}
-      >
-        <Target size={24} class="mb-2" />
-        <span class="text-sm">Set a Savings Goal</span>
-      </button>
-    {/if}
+<WidgetContainer {title} {startDrag}>
+  <div class="savings-widget">
+    <div class="actions">
+       <Button variant="text" onclick={addGoal} iconType="left">
+          <Icon icon={iconAdd} />
+          New Goal
+       </Button>
+    </div>
 
-    {#each $savings as goal (goal.id)}
-      <div class="bg-white/50 p-4 rounded-2xl space-y-3">
-        <div class="flex justify-between items-end">
-          <div>
-            <h4 class="font-semibold text-gray-800">{goal.name}</h4>
-            <div class="text-xs text-gray-500">
-              ${goal.current} / ${goal.target}
+    <div class="goals-list">
+      {#if $savings.length === 0}
+        <div class="empty-state">
+           <Icon icon={iconSavings} color="rgb(var(--m3-scheme-outline))" width="2rem" height="2rem" />
+           <p class="m3-font-body-small" style="color: rgb(var(--m3-scheme-outline))">No savings goals</p>
+        </div>
+      {/if}
+
+      {#each $savings as goal (goal.id)}
+        <div class="goal-item">
+          <div class="goal-header">
+            <div>
+              <h4 class="m3-font-title-small" style="margin: 0;">{goal.name}</h4>
+              <div class="m3-font-body-small" style="color: rgb(var(--m3-scheme-secondary))">
+                ${goal.current} / ${goal.target}
+              </div>
             </div>
+            <Button 
+               variant="tonal" 
+               iconType="full" 
+               onclick={() => addSavings(goal.id)}
+            >
+               <Icon icon={iconAdd} />
+            </Button>
           </div>
-          <button 
-             class="bg-blue-100 text-blue-600 p-1.5 rounded-lg hover:bg-blue-200 transition-colors"
-             onclick={() => addSavings(goal.id)}
-          >
-             <Plus size={16} />
-          </button>
-        </div>
 
-        <!-- Progress Bar -->
-        <div class="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-          <div 
-            class="h-full bg-blue-500 rounded-full transition-all duration-500 ease-out"
-            style="width: {(goal.current / goal.target) * 100}%"
-          ></div>
+          <div class="progress-wrapper">
+             <LinearProgress percent={(goal.current / goal.target) * 100} />
+          </div>
         </div>
-      </div>
-    {/each}
+      {/each}
+    </div>
   </div>
 </WidgetContainer>
+
+<style>
+  .savings-widget {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 1rem;
+  }
+  
+  .goals-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+  }
+  
+  .goal-item {
+      padding: 1rem;
+      border-radius: var(--m3-util-rounding-medium);
+      background-color: rgb(var(--m3-scheme-surface-container-high));
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+  }
+  
+  .goal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+  .empty-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+  }
+</style>

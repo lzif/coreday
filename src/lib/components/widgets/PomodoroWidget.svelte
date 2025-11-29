@@ -1,7 +1,11 @@
 <script>
   import WidgetContainer from '../WidgetContainer.svelte';
-  import { Play, Pause, RotateCcw } from 'lucide-svelte';
   import { onDestroy } from 'svelte';
+  import { Button, Icon, FAB, ConnectedButtons, TogglePrimitive } from 'm3-svelte';
+  
+  import iconPlayArrow from '@ktibow/iconset-material-symbols/play-arrow';
+  import iconPause from '@ktibow/iconset-material-symbols/pause';
+  import iconRefresh from '@ktibow/iconset-material-symbols/refresh';
 
   export let title;
   export let startDrag;
@@ -27,7 +31,6 @@
         } else {
           clearInterval(timerId);
           isRunning = false;
-          // Play sound or notify
         }
       }, 1000);
     }
@@ -51,48 +54,59 @@
 </script>
 
 <WidgetContainer {title} {startDrag}>
-  <div class="flex flex-col h-full items-center justify-center relative">
-    <!-- Mode Switcher -->
-    <div class="absolute top-0 left-0 right-0 flex justify-center gap-2 mb-4">
-      <button 
-        class="text-xs px-3 py-1 rounded-full transition-colors {mode === 'focus' ? 'bg-blue-100 text-blue-600 font-medium' : 'text-gray-400 hover:bg-gray-100'}"
-        onclick={() => setMode('focus')}
-      >
-        Focus
-      </button>
-      <button 
-        class="text-xs px-3 py-1 rounded-full transition-colors {mode === 'break' ? 'bg-green-100 text-green-600 font-medium' : 'text-gray-400 hover:bg-gray-100'}"
-        onclick={() => setMode('break')}
-      >
-        Break
-      </button>
+  <div class="pomodoro-widget">
+    <div class="controls-top">
+        <ConnectedButtons>
+            <TogglePrimitive 
+               toggle={mode === 'focus'} 
+               onclick={() => setMode('focus')}
+            >
+               Focus
+            </TogglePrimitive>
+            <TogglePrimitive 
+               toggle={mode === 'break'} 
+               onclick={() => setMode('break')}
+            >
+               Break
+            </TogglePrimitive>
+        </ConnectedButtons>
     </div>
 
-    <!-- Timer Display -->
-    <div class="text-5xl md:text-6xl font-light text-apple-dark tabular-nums tracking-tighter mb-8 mt-6">
+    <div class="timer-display m3-font-display-large">
       {formatTime(timeLeft)}
     </div>
 
-    <!-- Controls -->
-    <div class="flex items-center gap-4">
-      <button 
-        class="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95
-        {isRunning ? 'bg-amber-100 text-amber-600' : 'bg-blue-500 text-white shadow-lg shadow-blue-200'}"
-        onclick={toggleTimer}
-      >
-        {#if isRunning}
-          <Pause size={20} fill="currentColor" />
-        {:else}
-          <Play size={20} fill="currentColor" class="ml-1" />
-        {/if}
-      </button>
-
-      <button 
-        class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center hover:bg-gray-200 transition-colors"
-        onclick={resetTimer}
-      >
-        <RotateCcw size={16} />
-      </button>
+    <div class="controls-main">
+       <FAB 
+         icon={isRunning ? iconPause : iconPlayArrow} 
+         color="primary"
+         onclick={toggleTimer}
+       />
+       <Button variant="tonal" onclick={resetTimer} iconType="full">
+          <Icon icon={iconRefresh} />
+       </Button>
     </div>
   </div>
 </WidgetContainer>
+
+<style>
+  .pomodoro-widget {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+  }
+  
+  .timer-display {
+      font-variant-numeric: tabular-nums;
+      color: rgb(var(--m3-scheme-on-surface));
+  }
+  
+  .controls-main {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+  }
+</style>

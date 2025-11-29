@@ -1,9 +1,13 @@
 <script>
   import WidgetContainer from '../WidgetContainer.svelte';
   import { tasks } from '../../../stores/appStores.js';
-  import { Plus, Trash2, CheckCircle, Circle } from 'lucide-svelte';
   import { v4 as uuidv4 } from 'uuid';
-  import { CheckSquare } from 'lucide-svelte';
+  
+  import { TextField, Button, Icon, Checkbox, ListItem } from 'm3-svelte';
+  
+  import iconAdd from '@ktibow/iconset-material-symbols/add';
+  import iconDelete from '@ktibow/iconset-material-symbols/delete';
+  import iconCheckBox from '@ktibow/iconset-material-symbols/check-box';
 
   export let title;
   export let startDrag;
@@ -14,80 +18,92 @@
     if (!newTask.trim()) return;
     
     tasks.update(curr => [
-      { id: uuidv4(), text: newTask, completed: false, date: new Date().toISOString() },
+      { id: uuidv4(), text: newTask.trim(), completed: false, date: new Date().toISOString() },
       ...curr
     ]);
     
     newTask = '';
   }
 
-  function toggleTask(id) {
-    tasks.update(curr => curr.map(t => 
-      t.id === id ? { ...t, completed: !t.completed } : t
-    ));
-  }
-
   function deleteTask(id) {
     tasks.update(curr => curr.filter(t => t.id !== id));
-  }
-
-  function handleKeydown(e) {
-    if (e.key === 'Enter') addTask();
   }
 </script>
 
 <WidgetContainer {title} {startDrag}>
-  <div class="flex flex-col h-full">
-    <!-- Add Task -->
-    <div class="relative mb-4">
-      <input 
-        type="text" 
-        bind:value={newTask}
-        onkeydown={handleKeydown}
-        placeholder="Add a new task..." 
-        class="w-full bg-white/50 border border-gray-200 rounded-xl pl-4 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-      />
-      <button 
-        class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500 transition-colors"
-        onclick={addTask}
-      >
-        <Plus size={18} />
-      </button>
+  <div class="tasks-widget">
+    <div class="input-area">
+       <TextField 
+         label="Add a new task" 
+         bind:value={newTask} 
+         trailing={{ icon: iconAdd, onclick: addTask }}
+         on:enter={addTask}
+       />
     </div>
 
-    <!-- Task List -->
-    <div class="flex-1 overflow-y-auto no-scrollbar space-y-2 pr-1">
+    <div class="tasks-list">
       {#each $tasks as task (task.id)}
-        <div class="group flex items-center gap-3 p-2.5 rounded-xl bg-white/40 hover:bg-white/80 transition-all duration-200">
-          <button 
-            class="text-gray-400 hover:text-blue-500 transition-colors"
-            onclick={() => toggleTask(task.id)}
-          >
-            {#if task.completed}
-              <CheckCircle size={20} class="text-blue-500" />
-            {:else}
-              <Circle size={20} />
-            {/if}
-          </button>
-          
-          <span class="flex-1 text-sm text-gray-700 {task.completed ? 'line-through text-gray-400' : ''}">
-            {task.text}
-          </span>
-
-          <button 
-            class="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-all"
-            onclick={() => deleteTask(task.id)}
-          >
-            <Trash2 size={16} />
-          </button>
+        <div class="task-item">
+            <ListItem headline={task.text}>
+              <div slot="leading" class="checkbox-wrapper">
+                  <Checkbox>
+                      <input type="checkbox" bind:checked={task.completed} />
+                  </Checkbox>
+              </div>
+              <div slot="trailing">
+                 <Button 
+                   variant="text" 
+                   iconType="full" 
+                   onclick={() => deleteTask(task.id)}
+                 >
+                    <Icon icon={iconDelete} />
+                 </Button>
+              </div>
+            </ListItem>
         </div>
       {/each}
       {#if $tasks.length === 0}
-        <div class="h-full flex flex-col items-center justify-center text-gray-400 gap-2 min-h-[100px]">
-           <CheckSquare size={24} class="opacity-50" />
-           <p class="text-xs">No tasks yet. Stay focused!</p>
+        <div class="empty-state">
+           <Icon icon={iconCheckBox} color="rgb(var(--m3-scheme-outline))" width="2rem" height="2rem" />
+           <p class="m3-font-body-small" style="color: rgb(var(--m3-scheme-outline))">No tasks yet.</p>
         </div>
       {/if}
     </div>
   </div>
 </WidgetContainer>
+
+<style>
+  .tasks-widget {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 1rem;
+  }
+  
+  .tasks-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+  }
+  
+  .task-item {
+      /* ListItem usually handles hover states */
+  }
+
+  .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+  }
+  
+  .empty-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+  }
+</style>

@@ -1,9 +1,15 @@
 <script>
   import WidgetContainer from '../WidgetContainer.svelte';
   import { finance } from '../../../stores/appStores.js';
-  import { Plus, Minus, ArrowUpRight, ArrowDownRight } from 'lucide-svelte';
   import { v4 as uuidv4 } from 'uuid';
-  import { Archive } from 'lucide-svelte';
+  
+  import { TextField, Button, Icon } from 'm3-svelte';
+  
+  import iconAdd from '@ktibow/iconset-material-symbols/add';
+  import iconRemove from '@ktibow/iconset-material-symbols/remove';
+  import iconArrowOutward from '@ktibow/iconset-material-symbols/arrow-outward';
+  import iconCallReceived from '@ktibow/iconset-material-symbols/call-received';
+  import iconArchive from '@ktibow/iconset-material-symbols/archive';
 
   export let title;
   export let startDrag;
@@ -26,7 +32,7 @@
       const newBalance = type === 'income' ? store.balance + val : store.balance - val;
       return {
         balance: newBalance,
-        transactions: [newTransaction, ...store.transactions].slice(0, 10) // Keep last 10
+        transactions: [newTransaction, ...store.transactions].slice(0, 10)
       };
     });
 
@@ -34,69 +40,153 @@
   }
 </script>
 
-<WidgetContainer {title} headerAction={Plus} {startDrag}>
-  <div class="flex flex-col h-full">
-    <div class="mb-4">
-      <h4 class="text-xs md:text-sm text-gray-500 font-medium uppercase tracking-wider">Total Balance</h4>
-      <p class="text-2xl md:text-4xl font-bold text-apple-dark tracking-tight">${$finance.balance.toFixed(2)}</p>
+<WidgetContainer {title} headerAction={iconAdd} {startDrag}>
+  <div class="finance-widget">
+    <div class="balance-section">
+      <h4 class="m3-font-label-medium label">Total Balance</h4>
+      <p class="m3-font-display-medium balance">${$finance.balance.toFixed(2)}</p>
     </div>
 
     <!-- Quick Add -->
-    <div class="flex gap-2 mb-4">
-      <input 
-        type="number" 
-        bind:value={amount}
-        placeholder="0.00" 
-        class="w-full bg-white/50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-      />
-      <div class="flex bg-gray-100 p-1 rounded-lg">
-        <button 
-          class="p-1 rounded-md transition-colors {type === 'income' ? 'bg-white shadow-sm text-green-600' : 'text-gray-400'}"
-          onclick={() => type = 'income'}
-        >
-          <Plus size={16} />
-        </button>
-        <button 
-          class="p-1 rounded-md transition-colors {type === 'expense' ? 'bg-white shadow-sm text-red-600' : 'text-gray-400'}"
-          onclick={() => type = 'expense'}
-        >
-          <Minus size={16} />
-        </button>
+    <div class="add-section">
+      <div class="input-wrapper">
+          <TextField 
+            label="Amount" 
+            bind:value={amount} 
+            type="number"
+          />
       </div>
-      <button 
-        class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors"
-        onclick={addTransaction}
-      >
-        Add
-      </button>
+      
+      <div class="controls">
+          <div class="type-toggle">
+             <Button 
+                variant={type === 'income' ? 'filled' : 'outlined'} 
+                onclick={() => type = 'income'}
+                iconType="full"
+             >
+                <Icon icon={iconAdd} />
+             </Button>
+             <Button 
+                variant={type === 'expense' ? 'filled' : 'outlined'} 
+                onclick={() => type = 'expense'}
+                iconType="full"
+             >
+                 <Icon icon={iconRemove} />
+             </Button>
+          </div>
+          
+          <Button variant="tonal" onclick={addTransaction}>Add</Button>
+      </div>
     </div>
 
     <!-- Recent Transactions -->
-    <div class="flex-1 overflow-y-auto no-scrollbar space-y-2">
+    <div class="transactions-list">
       {#if $finance.transactions.length > 0}
         {#each $finance.transactions as t (t.id)}
-          <div class="flex justify-between items-center p-2 rounded-lg bg-white/40 hover:bg-white/60 transition-colors">
-            <div class="flex items-center gap-2">
-              <div class="p-1 rounded-full {t.type === 'income' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}">
-                {#if t.type === 'income'}
-                  <ArrowUpRight size={14} />
-                {:else}
-                  <ArrowDownRight size={14} />
-                {/if}
-              </div>
-              <span class="text-sm text-gray-700 capitalize">{t.type}</span>
+          <div class="transaction-item">
+            <div class="t-icon" style="background-color: rgb(var({t.type === 'income' ? '--m3-scheme-primary-container' : '--m3-scheme-error-container'}))">
+               <Icon 
+                 icon={t.type === 'income' ? iconArrowOutward : iconCallReceived} 
+                 color="rgb(var({t.type === 'income' ? '--m3-scheme-on-primary-container' : '--m3-scheme-on-error-container'}))"
+               />
             </div>
-            <span class="text-sm font-semibold {t.type === 'income' ? 'text-green-600' : 'text-red-600'}">
+            <div class="t-details">
+                <span class="m3-font-body-medium capitalize">{t.type}</span>
+            </div>
+            <span class="m3-font-label-large" style="color: rgb(var({t.type === 'income' ? '--m3-scheme-primary' : '--m3-scheme-error'}))">
               {t.type === 'income' ? '+' : '-'}${t.amount.toFixed(2)}
             </span>
           </div>
         {/each}
       {:else}
-        <div class="h-full flex flex-col items-center justify-center text-gray-400 gap-2 min-h-[100px]">
-           <Archive size={24} class="opacity-50" />
-           <p class="text-xs">No transactions yet</p>
+        <div class="empty-state">
+           <Icon icon={iconArchive} color="rgb(var(--m3-scheme-outline))" width="2rem" height="2rem" />
+           <p class="m3-font-body-small" style="color: rgb(var(--m3-scheme-outline))">No transactions</p>
         </div>
       {/if}
     </div>
   </div>
 </WidgetContainer>
+
+<style>
+  .finance-widget {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 1rem;
+  }
+  
+  .balance-section {
+      display: flex;
+      flex-direction: column;
+  }
+  
+  .label {
+      color: rgb(var(--m3-scheme-on-surface-variant));
+      text-transform: uppercase;
+      letter-spacing: 1px;
+  }
+  
+  .balance {
+      color: rgb(var(--m3-scheme-on-surface));
+      margin: 0;
+  }
+  
+  .add-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+  }
+  
+  .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+  
+  .type-toggle {
+      display: flex;
+      gap: 0.5rem;
+  }
+  
+  .transactions-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+  }
+  
+  .transaction-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      border-radius: var(--m3-util-rounding-medium);
+      background-color: rgb(var(--m3-scheme-surface-container-high));
+  }
+  
+  .t-icon {
+      padding: 0.25rem;
+      border-radius: 50%;
+      display: flex;
+  }
+  
+  .t-details {
+      flex: 1;
+  }
+  
+  .empty-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+  }
+  
+  /* Helper to reset button in toggle if needed, but Button handles it */
+  .input-wrapper {
+      /* TextField needs some space maybe */
+  }
+</style>

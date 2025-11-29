@@ -1,50 +1,143 @@
 <script>
-  import Sidebar from './lib/components/Sidebar.svelte';
+  import { NavCMLX, NavCMLXItem } from 'm3-svelte';
   import Dashboard from './lib/components/Dashboard.svelte';
-  
+
+  // Icons
+  import iconDashboard from '@ktibow/iconset-material-symbols/dashboard';
+  import iconWallet from '@ktibow/iconset-material-symbols/account-balance-wallet';
+  import iconCheckBox from '@ktibow/iconset-material-symbols/check-box';
+  import iconTrackChanges from '@ktibow/iconset-material-symbols/track-changes';
+  import iconSavings from '@ktibow/iconset-material-symbols/savings';
+  import iconStickyNote from '@ktibow/iconset-material-symbols/sticky-note-2';
+  import iconMood from '@ktibow/iconset-material-symbols/mood';
+  import iconTimer from '@ktibow/iconset-material-symbols/timer';
+
   let activeTab = 'dashboard';
+
+  const menuItems = [
+    { id: 'dashboard', icon: iconDashboard, label: 'Dashboard' },
+    { id: 'finance', icon: iconWallet, label: 'Finance' },
+    { id: 'tasks', icon: iconCheckBox, label: 'Tasks' },
+    { id: 'habits', icon: iconTrackChanges, label: 'Habits' },
+    { id: 'savings', icon: iconSavings, label: 'Savings' },
+    { id: 'notes', icon: iconStickyNote, label: 'Notes' },
+    { id: 'mood', icon: iconMood, label: 'Mood' },
+    { id: 'pomodoro', icon: iconTimer, label: 'Focus' },
+  ];
 </script>
 
-<div class="flex h-screen w-full overflow-hidden bg-apple-gray">
-  <!-- Sidebar -->
-  <Sidebar bind:activeTab />
+<div class="app-container">
+  <div class="nav">
+    <NavCMLX variant="auto">
+      {#each menuItems as item}
+        <NavCMLXItem
+          variant="auto"
+          icon={item.icon}
+          text={item.label}
+          selected={activeTab === item.id}
+          click={() => activeTab = item.id}
+        />
+      {/each}
+    </NavCMLX>
+  </div>
 
-  <!-- Main Content Area -->
-  <main class="flex-1 h-full overflow-y-auto overflow-x-hidden p-4 md:p-8 pb-24 md:pb-8 relative">
-    <div class="max-w-7xl mx-auto h-full">
-      <!-- Header -->
-      <header class="mb-4 md:mb-8 flex justify-between items-center transition-all duration-300">
-        <div>
-          <h2 class="text-2xl md:text-3xl font-bold text-apple-dark capitalize tracking-tight">
-            {activeTab}
-          </h2>
-          <p class="text-sm md:text-base text-gray-500 mt-1 hidden md:block">Welcome back to your personal space.</p>
+  <main class="main-content">
+     <header class="header">
+        <h1 class="m3-font-display-small capitalize" style="margin: 0;">{activeTab}</h1>
+        <div class="avatar">
+           <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" />
         </div>
-        <div class="flex items-center gap-4">
-          <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gray-200 border border-white shadow-sm overflow-hidden">
-             <!-- Placeholder Avatar -->
-             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" class="w-full h-full object-cover" />
-          </div>
-        </div>
-      </header>
+     </header>
 
-      <!-- Content Slot (Dynamic based on tab) -->
-      <div class="w-full h-full">
+     <div class="content-area">
          {#if activeTab === 'dashboard'}
              <Dashboard />
          {:else}
-             <div class="p-8 rounded-2xl glass min-h-[400px] flex items-center justify-center text-gray-400">
-                {activeTab} module placeholder
+             <div class="placeholder">
+                <p class="m3-font-body-large">{activeTab} module placeholder</p>
              </div>
          {/if}
-      </div>
-    </div>
+     </div>
   </main>
 </div>
 
 <style>
-  /* Safe area for mobile devices with home indicator */
-  :global(.safe-area-pb) {
-    padding-bottom: env(safe-area-inset-bottom, 20px);
+  .app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background: rgb(var(--m3-scheme-background));
+    color: rgb(var(--m3-scheme-on-background));
+  }
+
+  .nav {
+      /* Z-index to ensure it sits above content if needed */
+      z-index: 10;
+  }
+
+  .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      overflow-y: auto;
+      background: rgb(var(--m3-scheme-surface));
+      gap: 1rem;
+  }
+
+  .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+  }
+  
+  .avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: rgb(var(--m3-scheme-surface-container-high));
+  }
+  
+  .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+
+  .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+  }
+
+  .placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: rgb(var(--m3-scheme-on-surface-variant));
+  }
+
+  /* Responsive Logic for NavCMLX layout */
+  @media (width < 52.5rem) {
+    .app-container {
+      flex-direction: column-reverse; /* Bottom nav */
+      --m3-util-bottom-offset: 5rem;
+    }
+    .main-content {
+        /* Add padding at bottom if content is long, but column-reverse might handle the bar position. 
+           Usually bottom nav is fixed or sticky. 
+           If column-reverse is used, the nav is at the bottom of the flex container.
+        */
+    }
+  }
+
+  @media (width >= 52.5rem) {
+      .nav {
+          width: 5rem; /* Rail width */
+      }
   }
 </style>

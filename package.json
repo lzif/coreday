@@ -17,9 +17,10 @@
     "vite": "^7.2.4"
   },
   "dependencies": {
+    "@ktibow/iconset-material-symbols": "^0.0.1763966051",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",
-    "lucide-svelte": "^0.555.0",
+    "m3-svelte": "^5.15.2",
     "svelte-dnd-action": "^0.9.67",
     "tailwind-merge": "^3.4.0",
     "uuid": "^13.0.0",
