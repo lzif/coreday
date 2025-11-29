@@ -8,15 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@ktibow/iconset-material-symbols':
+        specifier: ^0.0.1763966051
+        version: 0.0.1763966051
       chart.js:
         specifier: ^4.5.1
         version: 4.5.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      lucide-svelte:
-        specifier: ^0.555.0
-        version: 0.555.0(svelte@5.45.2)
+      m3-svelte:
+        specifier: ^5.15.2
+        version: 5.15.2
       svelte-dnd-action:
         specifier: ^0.9.67
         version: 0.9.67(svelte@5.45.2)
@@ -712,6 +715,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
+
   '@isaacs/balanced-match@4.0.1':
     resolution: {integrity: sha512-yzMTt9lEb8Gv7zRioUilSglI0c0smZ9k5D65677DLWLtWJaXIS3CqcGyUFByYKlnUj6TkjLVs54fBl6+TiGQDQ==}
     engines: {node: 20 || >=22}
@@ -742,6 +748,12 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@ktibow/iconset-material-symbols@0.0.1763966051':
+    resolution: {integrity: sha512-lbaq/FHiUU9cpPdA4RYPcHUn0oCb8MEnBstb1yqKtnitRDCnjrqOMBdrXHvYQ4ByATFJLn0EJLnTbTWZt5UtAQ==}
+
+  '@ktibow/material-color-utilities-nightly@0.3.11763580498000':
+    resolution: {integrity: sha512-gXJdUUMCMSSvhQXsCa53e/slrpe/heOQqXy3tA60VVD3hDX2R6gKAVNLB0FCQfRauiYFpYYxNnJpStkvURFMzg==}
 
   '@kurkle/color@0.3.4':
     resolution: {integrity: sha512-M5UknZPHRu3DEDWoipU6sE8PdkZ6Z/S+v4dD+Ke8IaNlpdSQah50lz1KtcFBa2vsdOnwbbnxJwVM4wty6udA5w==}
@@ -1585,10 +1597,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucide-svelte@0.555.0:
-    resolution: {integrity: sha512-2kWIcstKGgQObLGpYXmcYwm/Y83Am+AQcP7MnybrmaRU1+QUJ/WSEpv/wAbwaSkrWUiN1TX/9FuWQKLeEeWCrQ==}
-    peerDependencies:
-      svelte: ^3 || ^4 || ^5.0.0-next.42
+  m3-svelte@5.15.2:
+    resolution: {integrity: sha512-VGSSJxxnl7qh8/AH13Fv3tgMIBeODEt1s2D10yIomq6lTi9m+tkV4TFCLGMMPjHMU7ZIVpKx4QXZxad2YVTWZQ==}
 
   magic-string@0.25.9:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
@@ -2974,6 +2984,8 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
+  '@iconify/types@2.0.0': {}
+
   '@isaacs/balanced-match@4.0.1': {}
 
   '@isaacs/brace-expansion@5.0.0':
@@ -3012,6 +3024,12 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@ktibow/iconset-material-symbols@0.0.1763966051':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@ktibow/material-color-utilities-nightly@0.3.11763580498000': {}
 
   '@kurkle/color@0.3.4': {}
 
@@ -3872,8 +3890,11 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-svelte@0.555.0(svelte@5.45.2):
+  m3-svelte@5.15.2:
     dependencies:
+      '@iconify/types': 2.0.0
+      '@ktibow/iconset-material-symbols': 0.0.1763966051
+      '@ktibow/material-color-utilities-nightly': 0.3.11763580498000
       svelte: 5.45.2
 
   magic-string@0.25.9:
