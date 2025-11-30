@@ -1,68 +1,71 @@
-# Coreday — Modular Life Manager
+<div align="center">
+<img width="1200" height="475" alt="Banner" src="https://raw.githubusercontent.com/lzif/coreday-new/refs/heads/main/unnamed.jpg" />
+</div>
 
-**Style:** Modular dashboard, offline-first, clean, modern, soft expressive colors, clear typography.
+# Coreday
 
-Coreday is a comprehensive life management tool designed with an Apple-like aesthetic (macOS/iOS). It features a modular, drag-and-drop dashboard that works fully offline, ensuring your data stays private and accessible anywhere.
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Vite](https://img.shields.io/badge/Vite-B73C93?style=for-the-badge&logo=vite&logoColor=white)
 
-## ✨ Features
+Coreday is an intelligent productivity and life management application powered by the Google Gemini API. It utilizes advanced AI agents to assist users in managing their tasks, habits, finances, and mood, providing holistic insights and actionable advice.
 
-- **Finance Tracker:** Manage income/expenses, view categories, and analyze charts.
-- **Time & Task Manager:** Planner, to-dos, subtasks, and calendar integration.
-- **Habit Tracker:** Build good habits with checklists, streaks, and statistics.
-- **Saving Progress:** Track savings goals with visual progress indicators.
-- **Notes & Journal:** Markdown support, tags, pinning, and search functionality.
-- **Insight Engine:** Aggregated insights across habits, mood, and finance.
-- **Reflective Journal/Mood Tracker:** Log moods and track emotions with charts.
-- **Pomodoro Timer & Focus Mode:** Boost productivity with focused work sessions.
-- **Widget Dashboard:** Fully modular, drag-and-drop interface. PWA-ready for mobile and desktop.
+## 🚀 Features
 
-## 🎨 UI/UX
+Coreday utilizes the Google Gemini API (`gemini-2.5-flash`) to power two distinct intelligent agents:
 
-- **UX:** Intuitive, responsive, optimized for both mobile and desktop.
-- **UI:** Apple-like design language (Glassmorphism, clean lines, rounded corners).
-- **Persistence:** Offline-first architecture using `localStorage`.
+### 🧠 The Insight Engine (Life Coach)
+The Insight Engine acts as a holistic analyst, correlating data across different modules (Finance, Habits, Mood) to provide actionable life advice.
 
----
+*   **Role:** Analytical Life Coach
+*   **Function:** Analyzes your finance balance, recent transactions, pending tasks, habit streaks, and recent moods.
+*   **Output:** Provides trendspotting (identifying patterns), actionable advice (small steps to improve), and motivation.
+*   **Location:** Access via the "Generate Insights" button.
 
-## 🚀 Getting Started
+### ✨ The Productivity Agent (Magic Wand)
+This agent focuses on executive function, helping users overcome "task paralysis" by breaking down large, vague goals into manageable steps.
 
-### Prerequisites
-- Node.js (v18 or higher)
-- npm
+*   **Role:** Task Decomposer
+*   **Function:** Takes a broad task (e.g., "Plan a birthday party") and breaks it down into 3-5 smaller, actionable subtasks.
+*   **Trigger:** Click the "Magic Wand" icon on a specific task.
 
-### Installation
-1. Clone the repository.
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+## 🛠️ Tech Stack
 
-## 🏗 Architecture
+*   **Frontend Framework:** [React](https://react.dev/)
+*   **Build Tool:** [Vite](https://vitejs.dev/)
+*   **AI Integration:** [Google Gemini API](https://ai.google.dev/) (`@google/genai`)
+*   **UI Icons:** [Lucide React](https://lucide.dev/)
+*   **Charts:** [Recharts](https://recharts.org/)
+*   **Language:** TypeScript
 
-### Tech Stack
-- **Framework:** Svelte 5 + Vite
-- **Styling:** Tailwind CSS (configured for Apple/Glassmorphism style)
-- **Icons:** Lucide Svelte
-- **Drag & Drop:** svelte-dnd-action
-- **PWA:** vite-plugin-pwa
-- **Storage:** `IndexedDB`,fallback to `localStorage` (Offline-first)
+## 🌐 Live Demo
 
-### Directory Structure
-- `src/stores/`: Contains the global state and persistence logic.
-- `src/lib/components/`: Reusable UI components.
-- `src/lib/components/widgets/`: Specific feature widgets (Finance, Tasks, etc.).
-- `src/lib/utils/`: Utility functions (e.g., class name merging).
+View the app in AI Studio: [Coreday on AI Studio](https://ai.studio/apps/drive/1nSUI9TBFL6f_kkLc2LQUKnfjoID17dP4)
 
-## 🛠 Extending the Project
+## 💻 Run Locally
 
-To add a new widget:
-1. Create a new component in `src/lib/components/widgets/`.
-2. Wrap it with `<WidgetContainer title="...">`.
-3. Create a new store in `src/stores/appStores.js` if it needs data persistence.
-4. Import and map the new widget in `src/lib/components/Dashboard.svelte`.
-5. Add a default entry to the `widgetsLayout` store in `src/stores/appStores.js`.
+**Prerequisites:** [Node.js](https://nodejs.org/) (v20 or higher recommended)
 
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/lzif/coreday-new.git
+    cd coreday-new
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure Environment Variables:**
+    Create a `.env.local` file in the root directory and add your Google Gemini API key:
+    ```env
+    GEMINI_API_KEY=your_api_key_here
+    ```
+
+4.  **Run the application:**
+    ```bash
+    npm run dev
+    ```
+    The app will be available at `http://localhost:3000`.
+The build workflow is defined in `.github/workflows/deploy.yml`. Changes to the `main` branch will automatically trigger a build and deployment.

@@ -1,44 +1,68 @@
-# Instructions for AI Agents
+# Coreday AI Agents
 
-This file provides context and guidelines for future AI agents working on Coreday.
+Coreday utilizes the Google Gemini API to power two distinct intelligent agents that assist users with productivity and life management. This document outlines their specific roles, configurations, and interaction models.
 
-## Project Philosophy
-1. **Material 3 Expressive Design:** The application follows the Material 3 Expressive design system. Use the `m3-svelte` library for all UI components.
-    - **Visuals:** Use vibrant colors, standard M3 elevation, and shapes.
-    - **Forbidden:** Do NOT use "Apple-like" design, glassmorphism (`backdrop-blur`), or large custom rounded corners.
-2. **Offline-First:** The app must be fully functional without an internet connection. All data *must* be stored in `localStorage` using the provided `persistentStore` factory. Do not introduce backend dependencies unless explicitly requested.
-3. **Modular Dashboard:** The dashboard is the core experience. Widgets must be independent, resizeable (future feature), and draggable.
+## 1. The Insight Engine (Life Coach)
 
-## Codebase Conventions
+The Insight Engine acts as a holistic analyst, correlating data across different modules (Finance, Habits, Mood) to provide actionable life advice.
 
-### Libraries
-- **Components:** `m3-svelte`.
-- **Icons:** `@ktibow/iconset-material-symbols` (pass as objects to components).
-- **Styling:** CSS Variables (`--m3-scheme-*`, `--m3-util-*`) and utility classes from `m3-svelte`.
+*   **Role:** Analytical Life Coach
+*   **Model:** `gemini-2.5-flash`
+*   **Location:** `components/InsightWidget.tsx` / `services/geminiService.ts`
+*   **Trigger:** Manual user request via the "Generate Insights" button.
 
-### Styling
-- **Theme:** The theme is defined in `src/app.css` using M3 CSS variables.
-- **Components:** M3 components do not accept class names for styling. Use wrapper `div`s for layout (margins, sizing) if necessary, but prefer `gap` in flex/grid containers.
-- **Colors:** Use CSS variables like `var(--m3-scheme-primary)`, `var(--m3-scheme-surface-container)`, etc.
+### Data Context (Input)
+The agent receives a sanitized, privacy-focused JSON summary of the user's current state:
+```json
+{
+  "financeBalance": -150.00,
+  "recentTransactions": [...],
+  "pendingTasks": 4,
+  "habitStreaks": [{"name": "Meditation", "streak": 5}],
+  "recentMoods": [{"rating": 2, "note": "Tired"}],
+  "savingsProgress": 45
+}
+```
 
-### Components
-- **WidgetContainer:** All dashboard widgets **must** be wrapped in `<WidgetContainer>`. This uses an M3 `Card` (Filled variant).
-- **Icons:** Import icons from `@ktibow/iconset-material-symbols/<icon_name>`.
+### System Instruction (Prompt)
+> You are Coreday's AI Insight Engine. Your goal is to act as a supportive, analytical, and slightly witty life coach.
+> Analyze the user's provided JSON data (finance, tasks, habits, mood).
+> Provide a structured response with 3 distinct sections:
+> 1. **Trendspotting**: Identify patterns (e.g., "You spend more when your mood is low").
+> 2. **Actionable Advice**: Give 2 concrete, small steps to improve their week.
+> 3. **Motivation**: A short, punchy encouraging quote or thought based on their progress.
+>
+> Keep the tone conversational and the output in Markdown format.
 
-## Common Tasks
+### Output
+Returns formatted Markdown text rendered via the `MarkdownRenderer` component.
 
-### Adding a New Feature
-1. **Define Store:** Add a new export in `src/stores/appStores.js`.
-2. **Create Widget:** Build the UI in `src/lib/components/widgets/<Feature>Widget.svelte` using `m3-svelte` components.
-3. **Register Widget:**
-   - Import it in `src/lib/components/Dashboard.svelte`.
-   - Add it to the `widgetComponents` map.
-   - Add a default entry to the `defaultLayout` array in `src/stores/appStores.js`.
+---
 
-### Modifying the Navigation
-- The navigation is handled by `NavCMLX` in `src/App.svelte` (or a dedicated wrapper).
-- Ensure it works across breakpoints (Rail on desktop, Bottom Bar on mobile).
+## 2. The Productivity Agent (Magic Wand)
 
-### Troubleshooting
-- **Drag & Drop Issues:** Ensure `svelte-dnd-action` is correctly handling `consider` and `finalize` events.
-- **Styling Issues:** Remember `m3-svelte` components isolate styles. Do not try to override them with global classes.
+This agent focuses specifically on executive function, helping users overcome "task paralysis" by breaking down large, vague goals into manageable steps.
+
+*   **Role:** Task Decomposer
+*   **Model:** `gemini-2.5-flash`
+*   **Location:** `components/TaskWidget.tsx` / `services/geminiService.ts`
+*   **Trigger:** User clicks the "Magic Wand" icon (`Wand2`) on a specific task.
+
+### Data Context (Input)
+*   **Task Title**: e.g., "Plan a birthday party"
+
+### Prompt Structure
+> Break down the task "${taskTitle}" into 3 to 5 smaller, actionable subtasks.
+
+### Configuration
+*   **Response Format**: `application/json`
+*   **Schema**:
+    ```typescript
+    {
+      type: Type.ARRAY,
+      items: { type: Type.STRING }
+    }
+    ```
+
+### Output
+Returns a pure JSON array of strings (e.g., `["Create guest list", "Buy decorations", "Order cake"]`), which are immediately hydrated into `SubTask` objects in the application state.
