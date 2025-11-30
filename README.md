@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="Banner" src="https://raw.githubusercontent.com/lzif/coreday-new/refs/heads/main/unnamed.jpg" />
+<img width="1200" height="475" alt="Banner" src="https://raw.githubusercontent.com/lzif/coreday/refs/heads/main/unnamed.jpg" />
 </div>
 
 # Coreday
