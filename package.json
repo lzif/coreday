@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "coreday",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,22 +8,17 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^6.2.1",
-    "autoprefixer": "^10.4.22",
-    "postcss": "^8.5.6",
-    "svelte": "^5.43.8",
-    "tailwindcss": "^3.4.17",
-    "vite": "^7.2.4"
-  },
   "dependencies": {
-    "@ktibow/iconset-material-symbols": "^0.0.1763966051",
-    "chart.js": "^4.5.1",
-    "clsx": "^2.1.1",
-    "m3-svelte": "^5.15.2",
-    "svelte-dnd-action": "^0.9.67",
-    "tailwind-merge": "^3.4.0",
-    "uuid": "^13.0.0",
-    "vite-plugin-pwa": "^1.2.0"
+    "recharts": "^3.5.1",
+    "react": "^19.2.0",
+    "@google/genai": "^1.30.0",
+    "lucide-react": "^0.555.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
   }
 }
