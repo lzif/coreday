@@ -1,49 +1,58 @@
-# 📝 COREDAY - REFACTORING ROADMAP
+# 🚀 CORE SYSTEM REFACTORING & OPTIMIZATION
 
-## 🏗️ TAB SPECIFIC TASKS
+## 🚨 PHASE 1: SECURITY HARDENING (CRITICAL)
+> **Goal:** Mencegah kebocoran API Key dan penyalahgunaan kuota Gemini.
 
-### 1. 📋 TASKS Tab (High Priority)
-- [x] **Separation of Concerns:** Pisahkan icon **Edit (Pensil)** dan **Delete (Sampah)**. Beri jarak aman (`gap-4` atau pindah Delete ke dalam modal/menu).
-- [x] **Input Layout:** Ubah input `What needs doing?` jadi **width 100%** (full row).
-- [x] **Action Grouping:** Pindahkan Dropdown Priority (`MED`) dan Tombol `Add` ke baris di bawah input atau gunakan layout yang lebih lega.
-- [x] **Empty State:** Tambahkan ilustrasi visual jika task list kosong (jangan cuma blank space).
+- [ ] **Remove Hardcoded Key:** Hapus `process.env.API_KEY` dari `src/services/geminiService.ts` dan file code lainnya.
+- [ ] **Create Settings UI:** Buat Modal/Menu baru (misal di Profile atau pojok kanan atas) untuk input "Gemini API Key".
+- [ ] **Local Storage Logic:** Simpan API Key input user ke `localStorage` browser.
+- [ ] **Service Refactor:** Update `generateLifeInsights` dan `generateSubtasks` untuk mengambil key dari `localStorage` user, bukan environment variable build time.
+- [ ] **Error Handling:** Jika key tidak ada atau invalid (401/403), tampilkan pesan ramah: "Please add your API Key in Settings" daripada error raw.
 
-### 2. 🔄 HABITS Tab (High Priority)
-- [x] **Hit Area Expansion:** Jadikan **seluruh kolom vertikal hari** sebagai area klik, bukan cuma kotak checkbox kecilnya.
-- [x] **Remove "Remove":** Hapus teks link "remove" yang kecil. Ganti dengan:
-  - Option A: Swipe-to-delete (Mobile native feel).
-  - Option B: Long-press untuk opsi delete.
-  - Option C: Icon titik tiga (...) yang membuka menu delete.
-- [x] **Visual Feedback:** Beri warna background tipis/abu-abu pada checkbox kosong agar terlihat "bisa dipencet".
+---
 
-### 3. 💸 FINANCE Tab
-- [x] **Input Sizing:** Besarkan padding input amount & description (`p-3` atau `h-12`).
-- [x] **Button Hierarchy:** Beri warna pada tombol `Income` (misal: abu-abu gelap/hijau pastel) agar seimbang dengan tombol `Expense` (Merah).
-- [x] **Quick Add Chips:** Ubah link text `+$10`, `+$50` menjadi tombol bentuk **Badge/Chip** (Rounded pill shape).
+## 🏗️ PHASE 2: ARCHITECTURE REFACTOR (THE "GOD OBJECT" FIX)
+> **Goal:** Memecah `App.tsx` yang kegemukan dan memperbaiki performa rendering.
 
-### 4. 📈 ANALYTICS Tab
-- [x] **Chart Dual Axis:** Perbaiki visualisasi "Mood vs Spend".
-  - Gunakan **Bar Chart** untuk Spending.
-  - Gunakan **Background Color/Gradient** vertical untuk Mood, ATAU pisahkan chart-nya.
-- [x] **Readability:** Besarkan font size label sumbu Y ($120, $90...).
-- [x] **Tooltip:** Tambahkan interaksi klik/hover pada chart untuk melihat detail ("Spent $X, Mood: Happy").
+- [ ] **Install Zustand:** `npm install zustand` (Library state management ringan).
+- [ ] **Create Task Store (`useTaskStore`):**
+  - Pindahkan logic `tasks` (add, edit, delete, toggle) dari `App.tsx` ke store ini.
+  - Implementasi persist middleware (untuk save ke localStorage otomatis).
+- [ ] **Create Finance Store (`useFinanceStore`):**
+  - Pindahkan logic `transactions` dan `savingsGoal`.
+- [ ] **Create Gamification Store (`useGamificationStore`):**
+  - Pindahkan logic XP, Level, dan Badges.
+- [ ] **Isolate Journal State:**
+  - Ubah `notes` di `App.tsx` agar tidak memicu re-render global.
+  - **Option A:** Pindahkan state text ke dalam komponen `JournalWidget` (lokal).
+  - **Option B:** Gunakan teknik *Debounce* (tunggu 1 detik setelah user berhenti mengetik baru simpan ke Global Store).
+- [ ] **Cleanup App.tsx:** Hapus semua function handler raksasa. `App.tsx` harusnya hanya berisi Layout dan memanggil Widget components.
 
-### 5. 🍅 POMODORO Tab
-- [x] **Control Group:** Ubah tombol terpisah `Work`, `Break`, `Long` menjadi satu komponen **Segmented Control** (Menyatu).
-- [x] **Start Button:** Pastikan tombol `Start` mendominasi layar (Primary Action) dengan warna kontras.
+---
 
-### 6. 🎭 MOOD Tab
-- [x] **Expressive UI:** Ganti tombol mood kecil (Sad/Meh/Happy) dengan **Emoji Besar/3D** atau icon yang lebih ekspresif.
-- [x] **Scrollable History:** Buat chart mood bisa di-scroll secara horizontal jika data > 7 hari (jangan dipadatkan).
+## ⚡ PHASE 3: LOGIC & PERFORMANCE TUNING
+> **Goal:** Memperbaiki bug timer dan menghemat penggunaan resource CPU.
 
-### 7. 🏆 PROFILE Tab (Legacy)
-- [x] **Motivation Fix:** Ganti icon "Gembok" murni dengan **Icon Badge Grayscale** (hitam putih & transparan).
-- [x] **Unlock Criteria:** Tambahkan tooltip atau modal saat badge diklik yang menjelaskan syarat unlock (e.g., "Complete 10 Tasks").
+- [ ] **Fix Pomodoro Timer Drift:**
+  - Hapus logic `timeLeft - 1`.
+  - Ganti logic: Saat start, catat `targetTime = Date.now() + duration`.
+  - Di `setInterval`, hitung sisa waktu = `targetTime - Date.now()`.
+- [ ] **Optimize Gamification Triggers:**
+  - Hapus pengecekan `checkBadges` yang berjalan di setiap update state.
+  - Ubah jadi *Event-Driven*:
+    - Cek badge "Money Bags" **HANYA** saat transaksi ditambahkan/diedit.
+    - Cek badge "Streak" **HANYA** saat habit di-toggle.
+    - Cek badge "Task Warrior" **HANYA** saat task selesai.
 
-### 8. 🧠 INSIGHT Tab (Life Coach)
-- [x] **Friendly Empty State:** Hapus pesan teknis "API Key Missing".
-- [x] **Call to Action:** Ganti dengan ilustrasi "AI Brain Offline" dan tombol "Connect API Key" yang membuka modal settings.
+---
 
-### 9. 📓 JOURNAL Tab
-- [x] **Typography:** Naikkan `line-height` (jarak antar baris) menjadi `leading-relaxed` atau `leading-loose` untuk keterbacaan.
-- [x] **FAB (Floating Action Button):** Ganti icon edit kecil dengan tombol melayang (FAB) besar di pojok kanan bawah untuk mode menulis.
+## 🎨 PHASE 4: UX & DATA INTEGRITY
+> **Goal:** Visualisasi data yang akurat dan pencegahan error data import.
+
+- [ ] **Chart Scaling Fix (Analytics):**
+  - Pisahkan Axis (Sumbu Y). Gunakan Sumbu Kiri untuk Spending ($) dan Sumbu Kanan untuk Mood (1-5).
+  - Atau, pisahkan menjadi 2 chart berbeda agar visual spending yang besar tidak membuat grafik mood terlihat datar (gepeng).
+- [ ] **Data Validation (Import):**
+  - Tambahkan validasi JSON Schema saat user melakukan "Import Backup".
+  - Pastikan file yang diupload memiliki struktur `tasks`, `transactions`, dll yang valid sebelum me-replace state aplikasi (Mencegah *White Screen of Death*).
+
