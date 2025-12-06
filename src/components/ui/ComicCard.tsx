@@ -40,7 +40,7 @@ export const ComicCard: React.FC<ComicCardProps> = ({ title, color, children, ic
         </div>
         {action && <div>{action}</div>}
       </div>
-      <div className="p-4 flex-1 overflow-auto">
+      <div className="p-4 flex-1 overflow-auto scrollbar-hide">
         {children}
       </div>
     </div>
@@ -53,7 +53,8 @@ export const ComicButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>
   className = '', 
   ...props 
 }) => {
-  const baseStyle = "px-3 py-1.5 rounded-lg font-bold border-2 border-black text-sm transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]";
+  // Added min-h-[44px] and min-w-[44px] for better touch targets
+  const baseStyle = "min-h-[44px] min-w-[44px] px-3 py-1.5 rounded-lg font-bold border-2 border-black text-sm transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] inline-flex items-center justify-center";
   
   const variants = {
     primary: "bg-black text-white hover:bg-neutral-800",
@@ -71,7 +72,8 @@ export const ComicButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>
 export const ComicInput: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => (
   <input 
     {...props}
-    className={`w-full border-2 border-black rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all placeholder:text-gray-500 text-gray-900 font-medium ${props.className || ''}`}
+    // Added min-h-[44px] for better touch targets
+    className={`w-full min-h-[44px] border-2 border-black rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-all placeholder:text-gray-500 text-gray-900 font-medium ${props.className || ''}`}
   />
 );
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ComicCard, ComicButton, ComicInput } from './ui/ComicCard';
-import { DollarSign, TrendingUp, TrendingDown, Plus, Save, Edit2 } from 'lucide-react';
+import { DollarSign, TrendingUp, TrendingDown, Plus, Save, Edit2, Trash2 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Transaction } from '../types';
 
@@ -91,7 +91,7 @@ export const FinanceWidget: React.FC<FinanceWidgetProps> = ({ transactions, onAd
         </div>
 
         {/* Savings Goal */}
-        <div className="space-y-1">
+        <div className="space-y-2">
             <div className="flex justify-between text-sm font-bold text-black">
                 <span>{savings.name}</span>
                 <span>${savings.current} / ${savings.target}</span>
@@ -103,13 +103,23 @@ export const FinanceWidget: React.FC<FinanceWidgetProps> = ({ transactions, onAd
                 />
             </div>
             <div className="flex gap-2 mt-1">
-                <button onClick={() => onUpdateSavings(savings.current + 10)} className="text-xs font-bold underline text-emerald-800 hover:text-emerald-950">+$10</button>
-                <button onClick={() => onUpdateSavings(savings.current + 50)} className="text-xs font-bold underline text-emerald-800 hover:text-emerald-950">+$50</button>
+                <button 
+                  onClick={() => onUpdateSavings(savings.current + 10)} 
+                  className="bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 px-3 py-1 rounded-full text-xs font-bold text-emerald-800 transition-colors"
+                >
+                  +$10
+                </button>
+                <button 
+                  onClick={() => onUpdateSavings(savings.current + 50)} 
+                  className="bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 px-3 py-1 rounded-full text-xs font-bold text-emerald-800 transition-colors"
+                >
+                  +$50
+                </button>
             </div>
         </div>
 
         {/* Input Area */}
-        <div className={`flex flex-col gap-2 p-2 rounded-lg border-2 border-dashed transition-colors ${editingId ? 'bg-yellow-50 border-yellow-400' : 'bg-gray-50 border-gray-300'}`}>
+        <div className={`flex flex-col gap-2 p-3 rounded-xl border-2 border-dashed transition-colors ${editingId ? 'bg-yellow-50 border-yellow-400' : 'bg-gray-50 border-gray-300'}`}>
           {editingId && <p className="text-xs font-black text-yellow-800 uppercase">Editing Transaction</p>}
           <div className="flex gap-2">
              <ComicInput 
@@ -117,59 +127,68 @@ export const FinanceWidget: React.FC<FinanceWidgetProps> = ({ transactions, onAd
                 type="number" 
                 value={amount} 
                 onChange={(e) => setAmount(e.target.value)}
-                className="w-1/3"
+                className="w-1/3 min-h-[48px] p-3 text-lg"
              />
              <ComicInput 
                 placeholder="Coffee, Salary..." 
                 value={desc} 
                 onChange={(e) => setDesc(e.target.value)}
-                className="w-2/3"
+                className="w-2/3 min-h-[48px] p-3"
              />
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 h-12">
             <button 
                 onClick={() => setType('income')}
-                className={`flex-1 py-1 rounded border-2 border-black text-xs font-bold transition-colors ${type === 'income' ? 'bg-emerald-300 text-black' : 'bg-white text-gray-700'}`}
+                className={`flex-1 rounded-lg border-2 border-black text-sm font-bold transition-colors ${type === 'income' ? 'bg-emerald-300 text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
             >
                 Income
             </button>
             <button 
                 onClick={() => setType('expense')}
-                className={`flex-1 py-1 rounded border-2 border-black text-xs font-bold transition-colors ${type === 'expense' ? 'bg-red-300 text-black' : 'bg-white text-gray-700'}`}
+                className={`flex-1 rounded-lg border-2 border-black text-sm font-bold transition-colors ${type === 'expense' ? 'bg-red-300 text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
             >
                 Expense
             </button>
-            <ComicButton onClick={handleSubmit} className="bg-black text-white min-w-[60px] flex justify-center">
-                {editingId ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+            <ComicButton onClick={handleSubmit} className="bg-black text-white min-w-[60px] flex justify-center items-center">
+                {editingId ? <Save className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
             </ComicButton>
             {editingId && (
-                <ComicButton onClick={handleCancelEdit} variant="danger" className="min-w-[40px] flex justify-center">
-                    x
+                <ComicButton onClick={handleCancelEdit} variant="danger" className="min-w-[40px] flex justify-center items-center">
+                    <Trash2 className="w-5 h-5" />
                 </ComicButton>
             )}
           </div>
         </div>
 
         {/* List */}
-        <div className="flex-1 overflow-auto space-y-2 max-h-40">
+        <div className="flex-1 overflow-auto space-y-3 pb-4">
             {transactions.slice().reverse().map(t => (
-                <div key={t.id} className={`flex justify-between items-center p-2 bg-white border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] ${editingId === t.id ? 'ring-2 ring-yellow-400' : ''}`}>
-                    <div className="flex items-center gap-2">
-                        {t.type === 'income' ? <TrendingUp className="w-4 h-4 text-emerald-700"/> : <TrendingDown className="w-4 h-4 text-red-600"/>}
-                        <span className="text-sm font-bold text-gray-900 truncate w-20 sm:w-24">{t.description}</span>
+                <div key={t.id} className={`flex justify-between items-center p-3 bg-white border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)] ${editingId === t.id ? 'ring-2 ring-yellow-400' : ''}`}>
+                    <div className="flex items-center gap-3 overflow-hidden">
+                        <div className={`w-10 h-10 rounded-full border-2 border-black flex items-center justify-center flex-shrink-0 ${t.type === 'income' ? 'bg-emerald-100' : 'bg-red-100'}`}>
+                           {t.type === 'income' ? <TrendingUp className="w-5 h-5 text-emerald-700"/> : <TrendingDown className="w-5 h-5 text-red-600"/>}
+                        </div>
+                        <div className="flex flex-col overflow-hidden">
+                            <span className="text-sm font-bold text-gray-900 truncate">{t.description}</span>
+                            <span className="text-xs text-gray-500">{new Date(t.date).toLocaleDateString()}</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <span className={`font-black ${t.type === 'income' ? 'text-emerald-700' : 'text-red-600'}`}>
+                    <div className="flex items-center gap-3">
+                        <span className={`font-black text-lg ${t.type === 'income' ? 'text-emerald-700' : 'text-red-600'}`}>
                             {t.type === 'income' ? '+' : '-'}${t.amount}
                         </span>
-                        <button onClick={() => handleEditClick(t)} className="text-gray-400 hover:text-blue-600 px-1">
-                            <Edit2 className="w-3 h-3" />
-                        </button>
-                        <button onClick={() => onDeleteTransaction(t.id)} className="text-gray-400 hover:text-red-600 font-bold px-1">×</button>
+                        <div className="flex gap-1">
+                            <button onClick={() => handleEditClick(t)} className="p-2 hover:bg-blue-50 rounded text-gray-400 hover:text-blue-600 transition-colors">
+                                <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button onClick={() => onDeleteTransaction(t.id)} className="p-2 hover:bg-red-50 rounded text-gray-400 hover:text-red-600 transition-colors">
+                                <Trash2 className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
                 </div>
             ))}
-            {transactions.length === 0 && <p className="text-center text-gray-500 text-sm italic font-medium">No transactions yet.</p>}
+            {transactions.length === 0 && <p className="text-center text-gray-500 text-sm italic font-medium py-4">No transactions yet.</p>}
         </div>
 
       </div>
