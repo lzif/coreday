@@ -8,7 +8,7 @@ The Insight Engine acts as a holistic analyst, correlating data across different
 
 *   **Role:** Analytical Life Coach
 *   **Model:** `gemini-2.5-flash`
-*   **Location:** `components/InsightWidget.tsx` / `services/geminiService.ts`
+*   **Location:** `src/components/InsightWidget.tsx` / `src/services/geminiService.ts`
 *   **Trigger:** Manual user request via the "Generate Insights" button.
 
 ### Data Context (Input)
@@ -45,7 +45,7 @@ This agent focuses specifically on executive function, helping users overcome "t
 
 *   **Role:** Task Decomposer
 *   **Model:** `gemini-2.5-flash`
-*   **Location:** `components/TaskWidget.tsx` / `services/geminiService.ts`
+*   **Location:** `src/components/TaskWidget.tsx` / `src/services/geminiService.ts`
 *   **Trigger:** User clicks the "Magic Wand" icon (`Wand2`) on a specific task.
 
 ### Data Context (Input)
