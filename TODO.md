@@ -1,15 +1,5 @@
 # 📝 COREDAY - REFACTORING ROADMAP
 
-## 🚨 GLOBAL UX (CRITICAL FIXES)
-> "Stop menyiksa jempol user."
-- [ ] **Touch Target Size:** Pastikan semua tombol/input minimal tinggi/lebar **44px** (Standard Mobile Touch).
-- [ ] **Scrollbar Cleanup:** Hide default browser scrollbar di semua container yang bisa di-scroll (`overflow-x-auto` & `overflow-y-auto`).
-  - *Tech:* Pake plugin `tailwind-scrollbar-hide` atau custom CSS utility.
-- [ ] **Destructive Actions:** Jauhkan tombol Delete/Remove dari tombol Edit/Utama. Gunakan konfirmasi atau menu tersembunyi.
-- [ ] **Error Messages:** Jangan pernah tampilkan raw error ("API Key Missing", "Null"). Ganti dengan ilustrasi atau pesan manusiawi.
-
----
-
 ## 🏗️ TAB SPECIFIC TASKS
 
 ### 1. 📋 TASKS Tab (High Priority)
@@ -57,10 +47,4 @@
 ### 9. 📓 JOURNAL Tab
 - [ ] **Typography:** Naikkan `line-height` (jarak antar baris) menjadi `leading-relaxed` atau `leading-loose` untuk keterbacaan.
 - [ ] **FAB (Floating Action Button):** Ganti icon edit kecil dengan tombol melayang (FAB) besar di pojok kanan bawah untuk mode menulis.
-
----
-
-## 🎨 VISUAL POLISH (THE "INDIE" VIBE)
-- [ ] **Consistency:** Pastikan ketebalan border konsisten (misal: semua `border-2` atau `border-[3px]`).
-- [ ] **Whitespace:** Tambahkan padding bottom pada container utama agar konten paling bawah tidak tertutup navigasi/layar HP (`pb-24`).
 
