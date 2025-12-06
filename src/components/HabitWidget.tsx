@@ -99,7 +99,7 @@ export const HabitWidget: React.FC<HabitWidgetProps> = ({ habits, onAddHabit, on
                                             w-8 h-8 rounded-lg border-2 border-black transition-all flex items-center justify-center
                                             ${completed 
                                                 ? 'bg-purple-600 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] translate-x-[1px] translate-y-[1px]' 
-                                                : 'bg-white/50 group-hover:bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5'
+                                                : 'bg-gray-200 group-hover:bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5'
                                             }
                                         `}
                                     >

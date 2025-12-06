@@ -106,11 +106,13 @@ export const TaskWidget: React.FC<TaskWidgetProps> = ({
 
         <div className="flex-1 overflow-auto space-y-3 pb-4">
           {activeTasks.length === 0 && completedTasks.length === 0 && (
-             <div className="text-center py-12 flex flex-col items-center">
-                <div className="bg-gray-100 p-4 rounded-full mb-3">
-                   <CheckSquare className="w-12 h-12 text-gray-300" />
+             <div className="text-center py-12 flex flex-col items-center justify-center min-h-[200px] border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+                <div className="bg-white p-4 rounded-full mb-3 border-2 border-gray-200 shadow-sm relative">
+                   <div className="absolute top-0 right-0 -mt-1 -mr-1 w-4 h-4 bg-yellow-400 rounded-full border border-black z-10"></div>
+                   <CheckSquare className="w-12 h-12 text-blue-300 transform -rotate-6" />
                 </div>
-                <p className="text-gray-500 font-bold">No tasks yet. Create one!</p>
+                <h3 className="text-gray-700 font-black text-lg">No tasks yet</h3>
+                <p className="text-gray-500 font-medium">Add a task to get started!</p>
              </div>
           )}
 
@@ -145,7 +147,7 @@ export const TaskWidget: React.FC<TaskWidgetProps> = ({
                         <span className="flex-1 font-black text-black break-words pt-1 leading-snug text-lg">{task.title}</span>
                     )}
 
-                    <div className="flex gap-1 items-start">
+                    <div className="flex gap-4 items-start">
                          <button 
                              onClick={() => handleMagicBreakdown(task)} 
                              className="min-h-[44px] min-w-[44px] text-purple-600 hover:bg-purple-50 p-1 rounded flex items-center justify-center"

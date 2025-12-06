@@ -101,11 +101,19 @@ export const AnalyticsWidget: React.FC<AnalyticsWidgetProps> = ({ data }) => {
                     <ComposedChart data={correlationData}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e5e5" />
                         <XAxis dataKey="date" tick={{fontSize: 10, fontWeight: 'bold'}} axisLine={false} tickLine={false} />
-                        <YAxis yAxisId="left" orientation="left" stroke="#ef4444" tick={{fontSize: 10, fontWeight: 'bold'}} axisLine={false} tickFormatter={(val) => `$${val}`} />
+                        <YAxis yAxisId="left" orientation="left" stroke="#ef4444" tick={{fontSize: 12, fontWeight: 'bold'}} axisLine={false} tickFormatter={(val) => `$${val}`} />
                         <YAxis yAxisId="right" orientation="right" stroke="#fbbf24" domain={[0, 6]} hide />
                         <Tooltip 
                             contentStyle={{ border: '2px solid black', borderRadius: '8px', boxShadow: '4px 4px 0px 0px black' }}
                             labelStyle={{ fontWeight: 'black', textTransform: 'uppercase' }}
+                            formatter={(value, name) => {
+                                if (name === 'Mood (1-5)') {
+                                    const v = value as number;
+                                    const label = v >= 4 ? 'Happy' : v <= 2 ? 'Sad' : 'Neutral';
+                                    return [label, 'Mood'];
+                                }
+                                return [`$${value}`, name];
+                            }}
                         />
                         <Bar yAxisId="left" dataKey="expense" barSize={20} fill="#fca5a5" stroke="#ef4444" strokeWidth={2} radius={[4, 4, 0, 0]} name="Spending" />
                         <Line yAxisId="right" type="monotone" dataKey="mood" stroke="#fbbf24" strokeWidth={4} dot={{r: 4, fill: "white", stroke: "black", strokeWidth: 2}} name="Mood (1-5)" />

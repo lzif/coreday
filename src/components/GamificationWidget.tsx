@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ComicCard } from './ui/ComicCard';
-import { Trophy, Star, Shield, Zap, Target, BookOpen, Lock } from 'lucide-react';
+import { Trophy, Star, Shield, Zap, Target, BookOpen } from 'lucide-react';
 import { Badge, GamificationState } from '../types';
 
 export const BADGES: Badge[] = [
@@ -24,6 +24,7 @@ const IconMap: Record<string, React.ReactNode> = {
 };
 
 export const GamificationWidget: React.FC<GamificationWidgetProps> = ({ state }) => {
+  const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
   const xpForNextLevel = state.level * 100;
   const progress = (state.xp % 100) / 100; // Simplified linear progression for visual
 
@@ -60,15 +61,19 @@ export const GamificationWidget: React.FC<GamificationWidgetProps> = ({ state })
                 {BADGES.map(badge => {
                     const isUnlocked = state.unlockedBadges.includes(badge.id);
                     return (
-                        <div key={badge.id} className="group relative flex flex-col items-center justify-center">
+                        <div 
+                            key={badge.id} 
+                            className="group relative flex flex-col items-center justify-center cursor-pointer"
+                            onClick={() => setSelectedBadge(badge.id === selectedBadge ? null : badge.id)}
+                        >
                             <div className={`
                                 w-12 h-12 rounded-lg border-2 border-black flex items-center justify-center transition-all
-                                ${isUnlocked ? 'bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-gray-200 opacity-60'}
+                                ${isUnlocked ? 'bg-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]' : 'bg-gray-100 grayscale opacity-50'}
                             `}>
-                                {isUnlocked ? IconMap[badge.icon] : <Lock className="w-4 h-4 text-gray-500" />}
+                                {IconMap[badge.icon]}
                             </div>
                             {/* Tooltip */}
-                            <div className="absolute bottom-full mb-2 hidden group-hover:block w-32 bg-black text-white text-xs p-2 rounded z-20 pointer-events-none">
+                            <div className={`absolute bottom-full mb-2 w-32 bg-black text-white text-xs p-2 rounded z-20 pointer-events-none transition-opacity ${selectedBadge === badge.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
                                 <p className="font-bold text-yellow-300 mb-1">{badge.name}</p>
                                 <p>{badge.description}</p>
                             </div>

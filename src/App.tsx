@@ -310,19 +310,10 @@ const App: React.FC = () => {
             title="Journal" 
             color="blue" 
             className="h-full"
-            action={
-                <button 
-                    onClick={() => setIsJournalEditing(!isJournalEditing)}
-                    className="p-1 hover:bg-blue-200 rounded-md transition-colors"
-                    title={isJournalEditing ? "View Preview" : "Edit Journal"}
-                >
-                    {isJournalEditing ? <BookOpen className="w-4 h-4 text-black" /> : <Edit3 className="w-4 h-4 text-black" />}
-                </button>
-            }
         >
             {isJournalEditing ? (
                 <textarea 
-                    className="w-full h-full resize-none outline-none text-sm font-mono font-medium text-gray-900 bg-yellow-50/50 p-2 rounded-lg placeholder:text-gray-500 border-2 border-transparent focus:border-black/10 transition-colors"
+                    className="w-full h-full resize-none outline-none text-sm font-mono font-medium text-gray-900 bg-yellow-50/50 p-2 rounded-lg placeholder:text-gray-500 border-2 border-transparent focus:border-black/10 transition-colors leading-relaxed"
                     value={state.notes}
                     onChange={updateNotes}
                     placeholder="# Daily Journal\n\nStart writing here..."
@@ -333,6 +324,13 @@ const App: React.FC = () => {
                     <MarkdownRenderer content={state.notes || "Click edit to start writing..."} />
                 </div>
             )}
+            <button 
+                onClick={() => setIsJournalEditing(!isJournalEditing)}
+                className="absolute bottom-6 right-6 w-14 h-14 bg-black text-white rounded-full flex items-center justify-center shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] hover:scale-110 transition-all z-10 border-2 border-white"
+                title={isJournalEditing ? "View Preview" : "Edit Journal"}
+            >
+                {isJournalEditing ? <BookOpen className="w-6 h-6" /> : <Edit3 className="w-6 h-6" />}
+            </button>
         </ComicCard>
     )
   };

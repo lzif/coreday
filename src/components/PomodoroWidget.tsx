@@ -56,12 +56,12 @@ export const PomodoroWidget: React.FC = () => {
     <ComicCard title="Focus" color="orange" icon={<Timer className="w-5 h-5" />}>
       <div className="flex flex-col items-center justify-center h-full gap-4 relative">
         
-        <div className="flex gap-2 mb-2 w-full">
-            {(['work', 'short', 'long'] as const).map((m) => (
+        <div className="flex w-full mb-2 border-2 border-black rounded-lg overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] bg-white">
+            {(['work', 'short', 'long'] as const).map((m, idx, arr) => (
                 <button
                     key={m}
                     onClick={() => changeMode(m)}
-                    className={`flex-1 text-xs font-black py-1.5 px-2 rounded border-2 border-black transition-all ${mode === m ? 'bg-orange-400 text-black shadow-none translate-y-0.5' : 'bg-white text-gray-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-50'}`}
+                    className={`flex-1 text-xs font-black py-2 transition-colors hover:bg-orange-100 ${mode === m ? 'bg-orange-400 text-black' : 'bg-transparent text-gray-500'} ${idx !== arr.length - 1 ? 'border-r-2 border-black' : ''}`}
                 >
                     {m === 'work' ? 'Work' : m === 'short' ? 'Break' : 'Long'}
                 </button>

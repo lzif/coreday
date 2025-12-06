@@ -16,7 +16,7 @@ export const MoodWidget: React.FC<MoodWidgetProps> = ({ moods, onAddMood, onEdit
   const [editRating, setEditRating] = useState<1|2|3|4|5>(3);
   const [editNote, setEditNote] = useState('');
 
-  const chartData = moods.slice(-7).map((m) => ({
+  const chartData = moods.slice().reverse().map((m) => ({
     name: new Date(m.date).toLocaleDateString('en-US', {weekday: 'narrow'}),
     rating: m.rating,
     fullDate: new Date(m.date).toLocaleDateString()
@@ -42,7 +42,7 @@ export const MoodWidget: React.FC<MoodWidgetProps> = ({ moods, onAddMood, onEdit
     <button
         onClick={onClick || (() => onAddMood(rating))}
         className={`
-            flex-1 h-10 flex items-center justify-center rounded-lg border-2 border-black
+            flex-1 h-14 flex items-center justify-center rounded-lg border-2 border-black
             shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-[2px] active:translate-y-[2px]
             transition-all 
             ${selected ? 'ring-2 ring-black ring-offset-1 ' + color : 'bg-white hover:bg-gray-50'}
@@ -60,25 +60,27 @@ export const MoodWidget: React.FC<MoodWidgetProps> = ({ moods, onAddMood, onEdit
         <div className="flex justify-between items-center bg-yellow-50 p-3 rounded-lg border-2 border-black">
             <span className="text-xs font-bold uppercase text-yellow-800">How are you?</span>
             <div className="flex gap-2 w-2/3">
-                <MoodButton rating={1} icon={<Frown className="w-4 h-4 text-red-600"/>} color="bg-red-200" />
-                <MoodButton rating={3} icon={<Meh className="w-4 h-4 text-yellow-600"/>} color="bg-yellow-200" />
-                <MoodButton rating={5} icon={<Smile className="w-4 h-4 text-green-600"/>} color="bg-green-200" />
+                <MoodButton rating={1} icon={<Frown className="w-8 h-8 text-red-600"/>} color="bg-red-200" />
+                <MoodButton rating={3} icon={<Meh className="w-8 h-8 text-yellow-600"/>} color="bg-yellow-200" />
+                <MoodButton rating={5} icon={<Smile className="w-8 h-8 text-green-600"/>} color="bg-green-200" />
             </div>
         </div>
 
         {/* Chart */}
-        <div className="min-h-[100px] h-32 bg-white border-2 border-dashed border-gray-300 rounded-lg p-2">
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
-                    <XAxis dataKey="name" tick={{fontSize: 10}} axisLine={false} tickLine={false} />
-                    <YAxis domain={[1, 5]} hide />
-                    <Tooltip 
-                        contentStyle={{ border: '2px solid black', borderRadius: '8px', boxShadow: '4px 4px 0px 0px black' }}
-                        itemStyle={{ fontWeight: 'bold' }}
-                    />
-                    <Line type="monotone" dataKey="rating" stroke="#fbbf24" strokeWidth={3} dot={{r: 4, fill: 'black', strokeWidth: 0}} />
-                </LineChart>
-            </ResponsiveContainer>
+        <div className="min-h-[100px] h-32 bg-white border-2 border-dashed border-gray-300 rounded-lg p-2 overflow-x-auto">
+            <div style={{ minWidth: Math.max(100, chartData.length * 40) }} className="h-full">
+                <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                        <XAxis dataKey="name" tick={{fontSize: 10}} axisLine={false} tickLine={false} />
+                        <YAxis domain={[1, 5]} hide />
+                        <Tooltip 
+                            contentStyle={{ border: '2px solid black', borderRadius: '8px', boxShadow: '4px 4px 0px 0px black' }}
+                            itemStyle={{ fontWeight: 'bold' }}
+                        />
+                        <Line type="monotone" dataKey="rating" stroke="#fbbf24" strokeWidth={3} dot={{r: 4, fill: 'black', strokeWidth: 0}} />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
         </div>
 
         {/* History List */}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ComicCard, ComicButton, MarkdownRenderer } from './ui/ComicCard';
-import { Sparkles, Loader2, RefreshCw, AlertTriangle, Settings } from 'lucide-react';
+import { Sparkles, Loader2, RefreshCw, AlertTriangle, Settings, Brain, PlugZap } from 'lucide-react';
 import { AppState } from '../types';
 import { generateLifeInsights } from '../services/geminiService';
 
@@ -61,20 +61,21 @@ export const InsightWidget: React.FC<InsightWidgetProps> = ({ data }) => {
 
         {error && (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-4 animate-in fade-in slide-in-from-bottom-4">
-                <div className="bg-red-100 p-4 rounded-full border-2 border-black mb-4">
-                    <AlertTriangle className="w-8 h-8 text-red-600" />
+                <div className="bg-gray-100 p-4 rounded-full border-2 border-black mb-4 relative">
+                    <Brain className="w-8 h-8 text-gray-400" />
+                    {error === 'API_KEY_MISSING' && <div className="absolute -bottom-1 -right-1 bg-red-500 rounded-full p-1 border border-white"><PlugZap className="w-3 h-3 text-white" /></div>}
                 </div>
                 <h3 className="font-black text-xl mb-2 text-black">
-                    {error === 'API_KEY_MISSING' ? "Brain Offline" : "Oops, brain freeze."}
+                    {error === 'API_KEY_MISSING' ? "AI Brain Offline" : "Oops, brain freeze."}
                 </h3>
                 <p className="text-gray-600 font-medium mb-6 text-sm">
                     {error === 'API_KEY_MISSING' 
-                        ? "I need an API Key to think. Please add it in your settings." 
+                        ? "Connect your API Key to unlock insights." 
                         : "Something went wrong while thinking. Try again?"}
                 </p>
                 {error === 'API_KEY_MISSING' ? (
-                     <ComicButton onClick={() => window.alert('Settings modal would open here (Add GEMINI_API_KEY)')} className="flex items-center gap-2">
-                        <Settings className="w-4 h-4" /> Open Settings
+                     <ComicButton onClick={() => window.alert('Settings modal would open here (Add GEMINI_API_KEY)')} className="flex items-center gap-2 bg-black text-white">
+                        <Settings className="w-4 h-4" /> Connect API Key
                      </ComicButton>
                 ) : (
                     <ComicButton onClick={handleGenerate} variant="primary">
